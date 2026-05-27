@@ -230,11 +230,11 @@ async function criarConta() {
     p_senha: senha
   })
 
-  if (error) {
-    console.log(error)
-    alert('Erro ao cadastrar')
-    return
-  }
+ if (error) {
+  console.log(error)
+  alert(JSON.stringify(error))
+  return
+}
 
   if (data.success) {
     alert('Conta criada com sucesso!')
