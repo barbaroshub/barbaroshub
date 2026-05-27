@@ -202,5 +202,49 @@ function validar(){
   document.getElementById('msg').innerHTML='Palpites salvos (protótipo local).';
 }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseUrl = 'https://qbtgbshyohcrcibvdtxf.supabase.co'
+const supabaseKey = 'sb_publishable_rEt1tBwzfdgtRO0qk884Kw_FWTF-IFg'
+
+const supabase = window.supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+)
+
+async function criarConta() {
+
+  const nome = document.querySelector('input[placeholder="Nome"]').value
+  const whatsapp = document.querySelector('input[placeholder="WhatsApp"]').value
+  const senha = document.querySelector('input[placeholder="Senha"]').value
+
+  if (!nome || !whatsapp || !senha) {
+    alert('Preencha todos os campos')
+    return
+  }
+
+  const { data, error } = await supabase
+    .rpc('criar_participante', {
+      p_nome: nome,
+      p_whatsapp: whatsapp,
+      p_senha: senha
+    })
+
+  if (error) {
+    alert('Erro ao cadastrar')
+    console.log(error)
+    return
+  }
+
+  if (data.success) {
+    alert('Conta criada com sucesso!')
+  } else {
+    alert(data.message)
+  }
+}
+
+document.querySelector('button').onclick = criarConta
+</script>
 </body>
 </html>
