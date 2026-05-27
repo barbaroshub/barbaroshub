@@ -440,6 +440,18 @@ document
 
 atualizarTelaUsuario()
 
+  function verificarAdmin(){
+
+  const user =
+  JSON.parse(localStorage.getItem('user'))
+
+  if(user && user.is_admin){
+    document.getElementById('adminPanel').style.display = 'block'
+  }
+}
+
+  verificarAdmin()
+
 </script>
 
 <div id="adminPanel" style="display:none" class="card">
