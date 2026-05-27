@@ -214,6 +214,90 @@ const sb = window.supabase.createClient(
   supabaseKey
 )
 
+function atualizarTelaUsuario() {
+  const usuario = JSON.parse(
+    localStorage.getItem('usuarioBolao')
+  )
+
+  if (usuario) {
+    document.getElementById(
+      'usuarioLogado'
+    ).innerHTML = 'Olá, ' + usuario.nome
+  }
+}
+
+async function criarConta() {
+
+  const nome = document.querySelector(
+    'input[placeholder="Nome"]'
+  ).value
+
+  const whatsapp = document.querySelector(
+    'input[placeholder="WhatsApp"]'
+  ).value
+
+  const senha = document.querySelector(
+    'input[placeholder="Senha"]'
+  ).value
+
+  if (!nome || !whatsapp || !senha) {
+    alert('Preencha todos os campos')
+    return
+  }
+
+  const { data, error } = await sb.rpc(
+    'criar_participante',
+    {
+      p_nome: nome,
+      p_whatsapp: whatsapp,
+      p_senha: senha
+    }
+  )
+
+  if (error) {
+    alert(JSON.stringify(error))
+    return
+  }
+
+  if (data.success) {
+
+    const login = await sb.rpc(
+      'login_participante',
+      {
+        p_whatsapp: whatsapp,
+        p_senha: senha
+      }
+    )
+
+    localStorage.setItem(
+      'usuarioBolao',
+      JSON.stringify(login.data)
+    )
+
+    atualizarTelaUsuario()
+
+    alert('Conta criada e login realizado!')
+  } else {
+    alert(data.message)
+  }
+}
+
+document
+  .querySelector('#criarContaBtn')
+  .addEventListener('click', criarConta)
+
+atualizarTelaUsuario()
+</script>
+
+<script>
+const supabaseUrl = 'https://qbtgbshyohcrcibvdtxf.supabase.co'
+const supabaseKey = 'sb_publishable_rEt1tBwzfdgtRO0qk884Kw_FWTF-IFg'
+
+const sb = window.supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+)
+
 async function criarConta() {
 
   const nome = document.querySelector('input[placeholder="Nome"]').value
