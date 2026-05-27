@@ -20,10 +20,7 @@ header{
   border-bottom:2px solid #c9a227;
 }
 
-h1{
-  color:#c9a227;
-  margin:0;
-}
+h1{color:#c9a227;margin:0}
 
 .container{
   max-width:1200px;
@@ -68,24 +65,11 @@ button{
   padding:14px;
 }
 
-.rules{
-  color:#c9a227;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-}
-
-td,th{
-  padding:10px;
-  border-bottom:1px solid #333;
-}
+.rules{color:#c9a227}
 
 #usuarioLogado{
   color:#c9a227;
   font-weight:bold;
-  margin-top:10px;
 }
 </style>
 </head>
@@ -99,6 +83,7 @@ td,th{
 
 <div class="container">
 
+<!-- CADASTRO -->
 <div class="card">
 <h2>Cadastro</h2>
 
@@ -106,13 +91,12 @@ td,th{
 <input id="whatsapp" placeholder="WhatsApp">
 <input id="senha" type="password" placeholder="Senha">
 
-<button id="criarContaBtn">
-Criar Conta
-</button>
+<button id="criarContaBtn">Criar Conta</button>
 
 <p id="usuarioLogado"></p>
 </div>
 
+<!-- PALPITES -->
 <div class="card">
 <h2>Palpites da Fase de Grupos</h2>
 
@@ -121,54 +105,18 @@ Criar Conta
 <div class="group-card">
 <h3>Grupo A</h3>
 <div class="group">
-<select>
-<option value="">1º lugar</option>
-<option>México</option>
-<option>Suíça</option>
-<option>Costa Rica</option>
-<option>Uzbequistão</option>
-</select>
-
-<select>
-<option value="">2º lugar</option>
-<option>México</option>
-<option>Suíça</option>
-<option>Costa Rica</option>
-<option>Uzbequistão</option>
-</select>
-
-<select>
-<option value="">3º lugar</option>
-<option>México</option>
-<option>Suíça</option>
-<option>Costa Rica</option>
-<option>Uzbequistão</option>
-</select>
-
-<select>
-<option value="">4º lugar</option>
-<option>México</option>
-<option>Suíça</option>
-<option>Costa Rica</option>
-<option>Uzbequistão</option>
-</select>
+<select><option value="">1º</option><option>México</option><option>Suíça</option><option>Costa Rica</option><option>Uzbequistão</option></select>
+<select><option value="">2º</option><option>México</option><option>Suíça</option><option>Costa Rica</option><option>Uzbequistão</option></select>
+<select><option value="">3º</option><option>México</option><option>Suíça</option><option>Costa Rica</option><option>Uzbequistão</option></select>
+<select><option value="">4º</option><option>México</option><option>Suíça</option><option>Costa Rica</option><option>Uzbequistão</option></select>
 </div>
 </div>
 
 </div>
 
-<button onclick="validar()">
-Salvar Palpites
-</button>
-
+<button onclick="salvarPalpites()">Salvar Palpites</button>
 <p id="msg"></p>
-</div>
 
-<div class="card rules">
-<h2>Regras</h2>
-<p>+10 por classificado correto</p>
-<p>+15 por posição correta</p>
-<p>+40 bônus grupo perfeito</p>
 </div>
 
 </div>
@@ -176,223 +124,101 @@ Salvar Palpites
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-const sb =
-window.supabase.createClient(
+const sb = supabase.createClient(
 'https://qbtgbshyohcrcibvdtxf.supabase.co',
 'sb_publishable_rEt1tBwzfdgtRO0qk884Kw_FWTF-IFg'
 )
 
-function atualizarTelaUsuario(){
-
-  const usuario =
-  JSON.parse(
-    localStorage.getItem(
-      'usuarioBolao'
-    )
-  )
-
-  if(
-    usuario &&
-    usuario.nome
-  ){
-    document
-    .getElementById(
-      'usuarioLogado'
-    )
-    .innerHTML =
-    'Olá, ' +
-    usuario.nome
+/* LOGIN VISUAL */
+function atualizarUsuario(){
+  const u = JSON.parse(localStorage.getItem('user'))
+  if(u){
+    document.getElementById('usuarioLogado').innerText =
+    'Olá, ' + u.nome
   }
 }
 
-async function loginAutomatico(
-  whatsapp,
-  senha
-){
-
-  const {
-    data,
-    error
-  } =
-  await sb.rpc(
-    'login_participante',
-    {
-      p_whatsapp:
-      whatsapp,
-
-      p_senha:
-      senha
-    }
-  )
-
-  if(
-    error ||
-    !data.success
-  ){
-    alert(
-      'Erro no login'
-    )
-    return
-  }
-
-  localStorage.setItem(
-    'usuarioBolao',
-    JSON.stringify(
-      data
-    )
-  )
-
-  atualizarTelaUsuario()
-}
-
+/* CADASTRO + LOGIN */
 async function criarConta(){
 
-  const nome =
-  document
-  .getElementById(
-    'nome'
-  ).value
+  const nome = document.getElementById('nome').value
+  const whatsapp = document.getElementById('whatsapp').value
+  const senha = document.getElementById('senha').value
 
-  const whatsapp =
-  document
-  .getElementById(
-    'whatsapp'
-  ).value
-
-  const senha =
-  document
-  .getElementById(
-    'senha'
-  ).value
-
-  if(
-    !nome ||
-    !whatsapp ||
-    !senha
-  ){
-    alert(
-      'Preencha todos os campos'
-    )
+  if(!nome || !whatsapp || !senha){
+    alert('Preencha tudo')
     return
   }
 
-  const {
-    data,
-    error
-  } =
-  await sb.rpc(
-    'criar_participante',
-    {
-      p_nome:nome,
-      p_whatsapp:
-      whatsapp,
-      p_senha:
-      senha
-    }
-  )
-
-  if(error){
-    alert(
-      JSON.stringify(
-        error
-      )
-    )
-    return
-  }
-
-  if(
-    data.success
-  ){
-
-    await loginAutomatico(
-      whatsapp,
-      senha
-    )
-
-    alert(
-      'Conta criada e login realizado!'
-    )
-
-  }else{
-    alert(
-      data.message
-    )
-  }
-}
-
-document
-.getElementById(
-  'criarContaBtn'
-)
-.addEventListener(
-  'click',
-  criarConta
-)
-
-function validar(){
-  document
-  .getElementById(
-    'msg'
-  )
-  .innerHTML =
-  'Palpites salvos.'
-}
-
-document
-.querySelectorAll(
-  '.group'
-)
-.forEach(group=>{
-
-  const selects =
-  group.querySelectorAll(
-    'select'
-  )
-
-  selects.forEach(sel=>{
-
-    sel.addEventListener(
-      'change',
-      ()=>{
-
-        let values =
-        [...selects]
-        .map(
-          s=>s.value
-        )
-        .filter(v=>v)
-
-        selects.forEach(s=>{
-
-          [...s.options]
-          .forEach(o=>{
-
-            if(
-              o.value==="" ||
-              o.value===s.value
-            ){
-              o.hidden=false
-            }else{
-              o.hidden=
-              values.includes(
-                o.value
-              )
-            }
-
-          })
-
-        })
-
-      }
-    )
-
+  const { data, error } = await sb.rpc('criar_participante', {
+    p_nome:nome,
+    p_whatsapp:whatsapp,
+    p_senha:senha
   })
 
-})
+  if(error){
+    alert(JSON.stringify(error))
+    return
+  }
 
-atualizarTelaUsuario()
+  const login = await sb.rpc('login_participante', {
+    p_whatsapp:whatsapp,
+    p_senha:senha
+  })
 
+  localStorage.setItem('user', JSON.stringify(login.data))
+
+  atualizarUsuario()
+
+  alert('Conta criada e login feito!')
+}
+
+document.getElementById('criarContaBtn')
+.addEventListener('click', criarConta)
+
+/* SALVAR PALPITES */
+async function salvarPalpites(){
+
+  const user = JSON.parse(localStorage.getItem('user'))
+
+  if(!user){
+    alert('Faça login')
+    return
+  }
+
+  const grupos = document.querySelectorAll('.group')
+  const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+  for(let i=0;i<grupos.length;i++){
+
+    const s = grupos[i].querySelectorAll('select')
+
+    const payload = {
+      participante_id:user.id,
+      grupo:letras[i],
+      primeiro:s[0].value,
+      segundo:s[1].value,
+      terceiro:s[2].value,
+      quarto:s[3].value
+    }
+
+    const { error } = await sb
+      .from('palpites_grupos')
+      .upsert(payload,{
+        onConflict:'participante_id,grupo'
+      })
+
+    if(error){
+      alert(JSON.stringify(error))
+      return
+    }
+  }
+
+  document.getElementById('msg').innerText =
+  'Palpites salvos com sucesso ✅'
+}
+
+atualizarUsuario()
 </script>
 
 </body>
