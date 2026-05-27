@@ -4,473 +4,648 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bolão Copa Bárbaros 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --gold:#c9a227;
+  --gold-light:#e2b93b;
+  --dark:#0d0d0d;
+  --card:#171717;
+  --card2:#151515;
+  --border:#2a2a2a;
+  --text:#e8e8e8;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
 body{
-  margin:0;
-  background:#0d0d0d;
-  color:#fff;
-  font-family:Arial;
+  background:var(--dark);
+  color:var(--text);
+  font-family:'Barlow',sans-serif;
+  font-size:15px;
 }
 
 header{
-  background:#111;
-  padding:25px;
+  background:#0f0f0f;
+  padding:28px 20px 20px;
   text-align:center;
-  border-bottom:2px solid #c9a227;
+  border-bottom:3px solid var(--gold);
+  position:sticky;
+  top:0;
+  z-index:100;
 }
 
-h1{
-  color:#c9a227;
-  margin:0;
+header h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.4rem;
+  color:var(--gold);
+  letter-spacing:3px;
+}
+
+header p{
+  color:#888;
+  font-size:0.85rem;
+  margin-top:4px;
+}
+
+#usuarioLogadoHeader{
+  margin-top:8px;
+  color:var(--gold);
+  font-weight:700;
+  font-size:0.9rem;
 }
 
 .container{
   max-width:1200px;
   margin:auto;
-  padding:20px;
+  padding:24px 16px;
 }
 
+.tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:24px;
+  flex-wrap:wrap;
+}
+
+.tab-btn{
+  background:#1e1e1e;
+  border:1px solid var(--border);
+  color:#aaa;
+  padding:10px 20px;
+  border-radius:8px;
+  cursor:pointer;
+  font-family:'Barlow',sans-serif;
+  font-weight:600;
+  font-size:0.9rem;
+  transition:all .2s;
+  width:auto;
+}
+
+.tab-btn:hover{background:#252525;color:var(--gold);}
+.tab-btn.active{background:var(--gold);color:#111;border-color:var(--gold);}
+
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
 .card{
-  background:#171717;
-  border:1px solid #c9a227;
+  background:var(--card);
+  border:1px solid #2a2a2a;
   border-radius:14px;
-  padding:18px;
+  padding:22px;
   margin-bottom:20px;
 }
 
-input,select,button{
+.card h2{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.5rem;
+  color:var(--gold);
+  letter-spacing:2px;
+  margin-bottom:16px;
+  border-bottom:1px solid #2a2a2a;
+  padding-bottom:10px;
+}
+
+input, select{
   width:100%;
-  padding:12px;
+  padding:12px 14px;
+  margin:6px 0;
+  border-radius:8px;
+  border:1px solid #2a2a2a;
+  background:#111;
+  color:#fff;
+  font-family:'Barlow',sans-serif;
+  font-size:0.95rem;
+  outline:none;
+  transition:border .2s;
+}
+
+input:focus, select:focus{border-color:var(--gold);}
+
+button{
+  width:100%;
+  padding:12px 14px;
   margin:8px 0;
   border-radius:8px;
   border:none;
-  box-sizing:border-box;
+  background:var(--gold);
+  color:#111;
+  font-weight:700;
+  font-family:'Barlow',sans-serif;
+  font-size:0.95rem;
+  cursor:pointer;
+  transition:background .2s, transform .1s;
 }
 
-button{
-  background:#c9a227;
-  color:#111;
-  font-weight:bold;
-  cursor:pointer;
+button:hover{background:var(--gold-light);}
+button:active{transform:scale(0.98);}
+
+.btn-secondary{
+  background:#1e1e1e;
+  color:var(--gold);
+  border:1px solid var(--gold);
+}
+.btn-secondary:hover{background:#252525;}
+
+.btn-danger{background:#8b1a1a;color:#fff;}
+.btn-danger:hover{background:#a52020;}
+
+.auth-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+@media(max-width:600px){.auth-grid{grid-template-columns:1fr;}}
+
+.auth-box{
+  background:#111;
+  border:1px solid #2a2a2a;
+  border-radius:12px;
+  padding:20px;
+}
+.auth-box h3{
+  color:var(--gold);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.2rem;
+  letter-spacing:2px;
+  margin-bottom:12px;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:15px;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:14px;
+  margin-bottom:16px;
 }
 
 .group-card{
-  background:#151515;
-  border:1px solid #333;
+  background:var(--card2);
+  border:1px solid var(--border);
   border-radius:12px;
   padding:14px;
 }
 
-.rules{
-  color:#c9a227;
+.group-card h3{
+  color:var(--gold);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.1rem;
+  letter-spacing:1px;
+  margin-bottom:10px;
 }
 
-table{
-  width:100%;
-  border-collapse:collapse;
+.pos-label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:4px 0;
 }
+.pos-label span{
+  font-size:0.75rem;
+  color:#666;
+  min-width:22px;
+  font-weight:600;
+}
+.pos-label select{margin:0;font-size:0.85rem;padding:8px 10px;}
 
-td,th{
-  padding:10px;
-  border-bottom:1px solid #333;
+.ranking-table{width:100%;border-collapse:collapse;}
+.ranking-table th{
+  text-align:left;
+  padding:10px 12px;
+  color:var(--gold);
+  font-size:0.8rem;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  border-bottom:2px solid #2a2a2a;
 }
+.ranking-table td{padding:12px;border-bottom:1px solid #1e1e1e;font-size:0.9rem;}
+.ranking-table tr:hover td{background:#1a1a1a;}
 
-#usuarioLogado{
-  color:#c9a227;
-  font-weight:bold;
-  margin-top:10px;
+.rank-pos{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:#555;width:40px;}
+.rank-pos.gold{color:#FFD700;}
+.rank-pos.silver{color:#C0C0C0;}
+.rank-pos.bronze{color:#CD7F32;}
+.rank-pts{font-weight:700;color:var(--gold);font-size:1rem;}
+
+.rules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
+.rule-item{background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:16px;text-align:center;}
+.rule-pts{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);display:block;}
+.rule-desc{font-size:0.8rem;color:#888;margin-top:4px;}
+
+#msg{margin-top:8px;font-size:0.9rem;min-height:20px;color:var(--gold);font-weight:600;}
+.msg-erro{color:#e05555!important;}
+
+.admin-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.admin-actions button{width:auto;flex:1;}
+
+.status-badge{
+  display:inline-block;padding:3px 10px;border-radius:20px;
+  font-size:0.75rem;font-weight:700;background:#1a3a1a;color:#4caf50;
 }
+.status-badge.fechado{background:#3a1a1a;color:#e05555;}
+
+.loading{text-align:center;padding:30px;color:#555;font-size:0.9rem;}
+
+#toast{
+  position:fixed;bottom:24px;right:24px;
+  background:#1e1e1e;border:1px solid var(--gold);
+  color:var(--text);padding:14px 20px;border-radius:10px;
+  font-size:0.9rem;z-index:9999;
+  opacity:0;transform:translateY(20px);
+  transition:all .3s;pointer-events:none;max-width:320px;
+}
+#toast.show{opacity:1;transform:translateY(0);}
+#toast.erro{border-color:#e05555;}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>Bolão Copa Bárbaros 2026</h1>
-<p>Fase de grupos • Palpites encerram 1 dia antes da Copa</p>
+  <h1>⚽ Bolão Copa Bárbaros 2026</h1>
+  <p>Fase de grupos • Palpites encerram 1 dia antes da Copa</p>
+  <div id="usuarioLogadoHeader"></div>
 </header>
 
 <div class="container">
 
-<div class="card">
-<h2>Cadastro</h2>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('tab-auth')">👤 Entrar / Cadastrar</button>
+    <button class="tab-btn" onclick="mostrarTab('tab-palpites')">⚽ Meus Palpites</button>
+    <button class="tab-btn" onclick="mostrarTab('tab-ranking')">🏆 Ranking</button>
+    <button class="tab-btn" onclick="mostrarTab('tab-regras')">📋 Regras</button>
+    <button class="tab-btn" id="tabAdmin" style="display:none" onclick="mostrarTab('tab-admin')">🔧 Admin</button>
+  </div>
 
-<input id="nome" placeholder="Nome">
-<input id="whatsapp" placeholder="WhatsApp">
-<input id="senha" type="password" placeholder="Senha">
+  <!-- TAB AUTH -->
+  <div id="tab-auth" class="tab-content active">
+    <div class="auth-grid">
+      <div class="auth-box">
+        <h3>Criar Conta</h3>
+        <input id="cad-nome" placeholder="Nome completo">
+        <input id="cad-whatsapp" placeholder="WhatsApp (ex: 11999999999)">
+        <input id="cad-senha" type="password" placeholder="Senha">
+        <button onclick="criarConta()">Criar Conta</button>
+      </div>
+      <div class="auth-box">
+        <h3>Entrar</h3>
+        <input id="login-whatsapp" placeholder="WhatsApp">
+        <input id="login-senha" type="password" placeholder="Senha">
+        <button onclick="fazerLogin()">Entrar</button>
+        <button class="btn-secondary" onclick="fazerLogout()" style="margin-top:4px">Sair da Conta</button>
+      </div>
+    </div>
+  </div>
 
-<button id="criarContaBtn">
-Criar Conta
-</button>
+  <!-- TAB PALPITES -->
+  <div id="tab-palpites" class="tab-content">
+    <div class="card">
+      <h2>Palpites da Fase de Grupos</h2>
+      <div class="grid" id="gruposGrid"></div>
+      <button onclick="salvarPalpites()" id="btnSalvar">💾 Salvar Palpites</button>
+      <p id="msg"></p>
+    </div>
+  </div>
 
-<p id="usuarioLogado"></p>
+  <!-- TAB RANKING -->
+  <div id="tab-ranking" class="tab-content">
+    <div class="card">
+      <h2>🏆 Ranking Geral</h2>
+      <button class="btn-secondary" onclick="carregarRanking()" style="width:auto;padding:8px 16px;margin-bottom:16px">↻ Atualizar</button>
+      <div id="rankingContainer"><div class="loading">Clique em Atualizar para carregar o ranking.</div></div>
+    </div>
+  </div>
+
+  <!-- TAB REGRAS -->
+  <div id="tab-regras" class="tab-content">
+    <div class="card">
+      <h2>📋 Regras de Pontuação</h2>
+      <div class="rules-grid">
+        <div class="rule-item">
+          <span class="rule-pts">+10</span>
+          <div class="rule-desc">Por seleção classificada corretamente (top 2)</div>
+        </div>
+        <div class="rule-item">
+          <span class="rule-pts">+15</span>
+          <div class="rule-desc">Por seleção na posição exata correta</div>
+        </div>
+        <div class="rule-item">
+          <span class="rule-pts">+40</span>
+          <div class="rule-desc">Bônus por grupo 100% correto</div>
+        </div>
+      </div>
+      <p style="margin-top:20px;color:#666;font-size:0.85rem;">
+        Os palpites ficam abertos até 24h antes do início da Copa do Mundo 2026.
+        Após o encerramento, nenhuma alteração será aceita.
+      </p>
+    </div>
+  </div>
+
+  <!-- TAB ADMIN -->
+  <div id="tab-admin" class="tab-content">
+    <div class="card">
+      <h2>🔧 Painel do Admin</h2>
+      <div style="margin-bottom:16px">
+        <span>Status do bolão: </span>
+        <span class="status-badge" id="statusBolao">Aberto</span>
+      </div>
+      <div class="admin-actions">
+        <button onclick="recalcularRanking()">⚡ Recalcular Ranking</button>
+        <button class="btn-danger" onclick="fecharBolao()">🔒 Fechar Bolão</button>
+        <button class="btn-secondary" onclick="abrirBolao()">🔓 Reabrir Bolão</button>
+      </div>
+      <div style="margin-top:20px">
+        <h3 style="color:var(--gold);margin-bottom:12px;font-family:'Bebas Neue';letter-spacing:1px">Participantes Cadastrados</h3>
+        <div id="adminParticipantes"><div class="loading">Carregando...</div></div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<div class="card">
-<h2>Palpites da Fase de Grupos</h2>
-
-<div class="grid">
-
-<div class="group-card"><h3>Grupo A</h3><div class="group">
-<select><option value="">1º</option><option>México</option><option>Suíça</option><option>Costa Rica</option><option>Uzbequistão</option></select>
-<select><option value="">2º</option><option>México</option><option>Suíça</option><option>Costa Rica</option><option>Uzbequistão</option></select>
-<select><option value="">3º</option><option>México</option><option>Suíça</option><option>Costa Rica</option><option>Uzbequistão</option></select>
-<select><option value="">4º</option><option>México</option><option>Suíça</option><option>Costa Rica</option><option>Uzbequistão</option></select>
-</div></div>
-
-<div class="group-card"><h3>Grupo B</h3><div class="group">
-<select><option value="">1º</option><option>Espanha</option><option>Chile</option><option>Coreia do Sul</option><option>Camarões</option></select>
-<select><option value="">2º</option><option>Espanha</option><option>Chile</option><option>Coreia do Sul</option><option>Camarões</option></select>
-<select><option value="">3º</option><option>Espanha</option><option>Chile</option><option>Coreia do Sul</option><option>Camarões</option></select>
-<select><option value="">4º</option><option>Espanha</option><option>Chile</option><option>Coreia do Sul</option><option>Camarões</option></select>
-</div></div>
-
-<div class="group-card"><h3>Grupo C</h3><div class="group">
-<select><option value="">1º</option><option>Brasil</option><option>Marrocos</option><option>Haiti</option><option>Escócia</option></select>
-<select><option value="">2º</option><option>Brasil</option><option>Marrocos</option><option>Haiti</option><option>Escócia</option></select>
-<select><option value="">3º</option><option>Brasil</option><option>Marrocos</option><option>Haiti</option><option>Escócia</option></select>
-<select><option value="">4º</option><option>Brasil</option><option>Marrocos</option><option>Haiti</option><option>Escócia</option></select>
-</div></div>
-
-  <!-- GRUPO D -->
-<div class="group-card"><h3>Grupo D</h3><div class="group">
-<select><option value="">1º</option><option>França</option><option>Colômbia</option><option>Tunísia</option><option>Nova Zelândia</option></select>
-<select><option value="">2º</option><option>França</option><option>Colômbia</option><option>Tunísia</option><option>Nova Zelândia</option></select>
-<select><option value="">3º</option><option>França</option><option>Colômbia</option><option>Tunísia</option><option>Nova Zelândia</option></select>
-<select><option value="">4º</option><option>França</option><option>Colômbia</option><option>Tunísia</option><option>Nova Zelândia</option></select>
-</div></div>
-
-<!-- GRUPO E -->
-<div class="group-card"><h3>Grupo E</h3><div class="group">
-<select><option value="">1º</option><option>Estados Unidos</option><option>Turquia</option><option>Paraguai</option><option>Zâmbia</option></select>
-<select><option value="">2º</option><option>Estados Unidos</option><option>Turquia</option><option>Paraguai</option><option>Zâmbia</option></select>
-<select><option value="">3º</option><option>Estados Unidos</option><option>Turquia</option><option>Paraguai</option><option>Zâmbia</option></select>
-<select><option value="">4º</option><option>Estados Unidos</option><option>Turquia</option><option>Paraguai</option><option>Zâmbia</option></select>
-</div></div>
-
-<!-- GRUPO F -->
-<div class="group-card"><h3>Grupo F</h3><div class="group">
-<select><option value="">1º</option><option>Portugal</option><option>México</option><option>Egito</option><option>Irlanda</option></select>
-<select><option value="">2º</option><option>Portugal</option><option>México</option><option>Egito</option><option>Irlanda</option></select>
-<select><option value="">3º</option><option>Portugal</option><option>México</option><option>Egito</option><option>Irlanda</option></select>
-<select><option value="">4º</option><option>Portugal</option><option>México</option><option>Egito</option><option>Irlanda</option></select>
-</div></div>
-
-<!-- GRUPO G -->
-<div class="group-card"><h3>Grupo G</h3><div class="group">
-<select><option value="">1º</option><option>Alemanha</option><option>Japão</option><option>Nigéria</option><option>Canadá</option></select>
-<select><option value="">2º</option><option>Alemanha</option><option>Japão</option><option>Nigéria</option><option>Canadá</option></select>
-<select><option value="">3º</option><option>Alemanha</option><option>Japão</option><option>Nigéria</option><option>Canadá</option></select>
-<select><option value="">4º</option><option>Alemanha</option><option>Japão</option><option>Nigéria</option><option>Canadá</option></select>
-</div></div>
-
-<!-- GRUPO H -->
-<div class="group-card"><h3>Grupo H</h3><div class="group">
-<select><option value="">1º</option><option>Holanda</option><option>Uruguai</option><option>Emirados Árabes</option><option>Gales</option></select>
-<select><option value="">2º</option><option>Holanda</option><option>Uruguai</option><option>Emirados Árabes</option><option>Gales</option></select>
-<select><option value="">3º</option><option>Holanda</option><option>Uruguai</option><option>Emirados Árabes</option><option>Gales</option></select>
-<select><option value="">4º</option><option>Holanda</option><option>Uruguai</option><option>Emirados Árabes</option><option>Gales</option></select>
-</div></div>
-
-<!-- GRUPO I -->
-<div class="group-card"><h3>Grupo I</h3><div class="group">
-<select><option value="">1º</option><option>Itália</option><option>Dinamarca</option><option>Equador</option><option>Arábia Saudita</option></select>
-<select><option value="">2º</option><option>Itália</option><option>Dinamarca</option><option>Equador</option><option>Arábia Saudita</option></select>
-<select><option value="">3º</option><option>Itália</option><option>Dinamarca</option><option>Equador</option><option>Arábia Saudita</option></select>
-<select><option value="">4º</option><option>Itália</option><option>Dinamarca</option><option>Equador</option><option>Arábia Saudita</option></select>
-</div></div>
-
-<!-- GRUPO J -->
-<div class="group-card"><h3>Grupo J</h3><div class="group">
-<select><option value="">1º</option><option>Argentina</option><option>Argélia</option><option>Áustria</option><option>Jordânia</option></select>
-<select><option value="">2º</option><option>Argentina</option><option>Argélia</option><option>Áustria</option><option>Jordânia</option></select>
-<select><option value="">3º</option><option>Argentina</option><option>Argélia</option><option>Áustria</option><option>Jordânia</option></select>
-<select><option value="">4º</option><option>Argentina</option><option>Argélia</option><option>Áustria</option><option>Jordânia</option></select>
-</div></div>
-
-<!-- GRUPO K -->
-<div class="group-card"><h3>Grupo K</h3><div class="group">
-<select><option value="">1º</option><option>Bélgica</option><option>Sérvia</option><option>Costa do Marfim</option><option>Honduras</option></select>
-<select><option value="">2º</option><option>Bélgica</option><option>Sérvia</option><option>Costa do Marfim</option><option>Honduras</option></select>
-<select><option value="">3º</option><option>Bélgica</option><option>Sérvia</option><option>Costa do Marfim</option><option>Honduras</option></select>
-<select><option value="">4º</option><option>Bélgica</option><option>Sérvia</option><option>Costa do Marfim</option><option>Honduras</option></select>
-</div></div>
-
-<!-- GRUPO L -->
-<div class="group-card"><h3>Grupo L</h3><div class="group">
-<select><option value="">1º</option><option>Inglaterra</option><option>Croácia</option><option>Gana</option><option>Panamá</option></select>
-<select><option value="">2º</option><option>Inglaterra</option><option>Croácia</option><option>Gana</option><option>Panamá</option></select>
-<select><option value="">3º</option><option>Inglaterra</option><option>Croácia</option><option>Gana</option><option>Panamá</option></select>
-<select><option value="">4º</option><option>Inglaterra</option><option>Croácia</option><option>Gana</option><option>Panamá</option></select>
-</div></div>
-
-<button onclick="salvarPalpites()">
-Salvar Palpites
-</button>
-
-<p id="msg"></p>
-  
-</div>
-
-<div class="card rules">
-<h2>Regras</h2>
-<p>+10 por classificado correto</p>
-<p>+15 por posição correta</p>
-<p>+40 bônus grupo perfeito</p>
-</div>
+<div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-const sb =
-window.supabase.createClient(
-'https://qbtgbshyohcrcibvdtxf.supabase.co',
-'sb_publishable_rEt1tBwzfdgtRO0qk884Kw_FWTF-IFg'
+const sb = window.supabase.createClient(
+  'https://qbtgbshyohcrcibvdtxf.supabase.co',
+  'sb_publishable_rEt1tBwzfdgtRO0qk884Kw_FWTF-IFg'
 )
 
-function atualizarTelaUsuario(){
-
-  const usuario =
-  JSON.parse(
-    localStorage.getItem(
-      'usuarioBolao'
-    )
-  )
-
-  if(
-    usuario &&
-    usuario.nome
-  ){
-    document
-    .getElementById(
-      'usuarioLogado'
-    )
-    .innerHTML =
-    'Olá, ' +
-    usuario.nome
-  }
+const GRUPOS = {
+  A: ['México','África do Sul','Coreia do Sul','República Tcheca'],
+  B: ['Canadá','Suíça','Catar','Bósnia e Herzegovina'],
+  C: ['Brasil','Marrocos','Haiti','Escócia'],
+  D: ['Estados Unidos','Paraguai','Austrália','Turquia'],
+  E: ['Alemanha','Curaçao','Costa do Marfim','Equador'],
+  F: ['Holanda','Japão','Tunísia','Suécia'],
+  G: ['Bélgica','Egito','Irã','Nova Zelândia'],
+  H: ['Espanha','Cabo Verde','Arábia Saudita','Uruguai'],
+  I: ['França','Senegal','Noruega','Iraque'],
+  J: ['Argentina','Argélia','Áustria','Jordânia'],
+  K: ['Portugal','Uzbequistão','Colômbia','RD Congo'],
+  L: ['Inglaterra','Croácia','Gana','Panamá']
 }
 
-async function loginAutomatico(
-  whatsapp,
-  senha
-){
+function inicializarGrupos(){
+  const grid = document.getElementById('gruposGrid')
+  grid.innerHTML = ''
+  Object.entries(GRUPOS).forEach(([letra, times]) => {
+    const card = document.createElement('div')
+    card.className = 'group-card'
+    card.innerHTML = `
+      <h3>Grupo ${letra}</h3>
+      <div class="group" data-grupo="${letra}">
+        ${[1,2,3,4].map(pos => `
+          <div class="pos-label">
+            <span>${pos}º</span>
+            <select>
+              <option value="">${pos}º lugar</option>
+              ${times.map(t => `<option value="${t}">${t}</option>`).join('')}
+            </select>
+          </div>
+        `).join('')}
+      </div>
+    `
+    grid.appendChild(card)
+  })
+  document.querySelectorAll('.group').forEach(group => {
+    const selects = group.querySelectorAll('select')
+    selects.forEach(sel => {
+      sel.addEventListener('change', () => {
+        const vals = [...selects].map(s => s.value).filter(v => v)
+        selects.forEach(s => {
+          [...s.options].forEach(o => {
+            o.hidden = o.value !== '' && o.value !== s.value && vals.includes(o.value)
+          })
+        })
+      })
+    })
+  })
+}
 
-  const {
-    data,
-    error
-  } =
-  await sb.rpc(
-    'login_participante',
-    {
-      p_whatsapp:
-      whatsapp,
+function toast(msg, erro=false){
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'show' + (erro ? ' erro' : '')
+  clearTimeout(window._toastTimer)
+  window._toastTimer = setTimeout(() => t.className = '', 3500)
+}
 
-      p_senha:
-      senha
-    }
-  )
+function mostrarTab(id){
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'))
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if(b.getAttribute('onclick') && b.getAttribute('onclick').includes(id))
+      b.classList.add('active')
+  })
+  if(id === 'tab-ranking') carregarRanking()
+  if(id === 'tab-admin') carregarParticipantesAdmin()
+}
 
-  if(
-    error ||
-    !data.success
-  ){
-    alert(
-      'Erro no login'
-    )
-    return
+function getUsuario(){
+  try{ return JSON.parse(localStorage.getItem('usuarioBolao')) }
+  catch{ return null }
+}
+
+function atualizarTelaUsuario(){
+  const u = getUsuario()
+  const el = document.getElementById('usuarioLogadoHeader')
+  if(u && u.nome){
+    el.innerHTML = `Olá, ${u.nome} ${u.is_admin ? '👑' : ''}`
+    if(u.is_admin) document.getElementById('tabAdmin').style.display = ''
+  } else {
+    el.innerHTML = ''
+    document.getElementById('tabAdmin').style.display = 'none'
   }
-
-  localStorage.setItem(
-    'usuarioBolao',
-    JSON.stringify(
-      data
-    )
-  )
-
-  atualizarTelaUsuario()
 }
 
 async function criarConta(){
-
-  const nome =
-  document
-  .getElementById(
-    'nome'
-  ).value
-
-  const whatsapp =
-  document
-  .getElementById(
-    'whatsapp'
-  ).value
-
-  const senha =
-  document
-  .getElementById(
-    'senha'
-  ).value
-
-  if(
-    !nome ||
-    !whatsapp ||
-    !senha
-  ){
-    alert(
-      'Preencha todos os campos'
-    )
-    return
-  }
-
-  const {
-    data,
-    error
-  } =
-  await sb.rpc(
-    'criar_participante',
-    {
-      p_nome:nome,
-      p_whatsapp:
-      whatsapp,
-      p_senha:
-      senha
-    }
-  )
-
-  if(error){
-    alert(
-      JSON.stringify(
-        error
-      )
-    )
-    return
-  }
-
-  if(
-    data.success
-  ){
-
-    await loginAutomatico(
-      whatsapp,
-      senha
-    )
-
-    alert(
-      'Conta criada e login realizado!'
-    )
-
-  }else{
-    alert(
-      data.message
-    )
-  }
-}
-
-document
-.getElementById(
-  'criarContaBtn'
-)
-.addEventListener(
-  'click',
-  criarConta
-)
-
-function validar(){
-  document
-  .getElementById(
-    'msg'
-  )
-  .innerHTML =
-  'Palpites salvos.'
-}
-
-document
-.querySelectorAll(
-  '.group'
-)
-.forEach(group=>{
-
-  const selects =
-  group.querySelectorAll(
-    'select'
-  )
-
-  selects.forEach(sel=>{
-
-    sel.addEventListener(
-      'change',
-      ()=>{
-
-        let values =
-        [...selects]
-        .map(
-          s=>s.value
-        )
-        .filter(v=>v)
-
-        selects.forEach(s=>{
-
-          [...s.options]
-          .forEach(o=>{
-
-            if(
-              o.value==="" ||
-              o.value===s.value
-            ){
-              o.hidden=false
-            }else{
-              o.hidden=
-              values.includes(
-                o.value
-              )
-            }
-
-          })
-
-        })
-
-      }
-    )
-
+  const nome     = document.getElementById('cad-nome').value.trim()
+  const whatsapp = document.getElementById('cad-whatsapp').value.trim()
+  const senha    = document.getElementById('cad-senha').value
+  if(!nome || !whatsapp || !senha){ toast('Preencha todos os campos.', true); return }
+  const { data, error } = await sb.rpc('criar_participante', {
+    p_nome: nome, p_whatsapp: whatsapp, p_senha: senha
   })
-
-})
-
-atualizarTelaUsuario()
-
-  function verificarAdmin(){
-
-  const user =
-  JSON.parse(localStorage.getItem('user'))
-
-  if(user && user.is_admin){
-    document.getElementById('adminPanel').style.display = 'block'
+  if(error){ toast('Erro: ' + error.message, true); return }
+  if(data.success){
+    await fazerLoginDireto(whatsapp, senha)
+    toast('Conta criada e login realizado! ✅')
+  } else {
+    toast(data.message, true)
   }
 }
 
-  verificarAdmin()
+async function fazerLogin(){
+  const whatsapp = document.getElementById('login-whatsapp').value.trim()
+  const senha    = document.getElementById('login-senha').value
+  if(!whatsapp || !senha){ toast('Preencha WhatsApp e senha.', true); return }
+  await fazerLoginDireto(whatsapp, senha)
+}
 
+async function fazerLoginDireto(whatsapp, senha){
+  const { data, error } = await sb.rpc('login_participante', {
+    p_whatsapp: whatsapp, p_senha: senha
+  })
+  if(error || !data || !data.success){
+    toast('WhatsApp ou senha incorretos.', true); return
+  }
+  localStorage.setItem('usuarioBolao', JSON.stringify(data))
+  atualizarTelaUsuario()
+  carregarPalpitesSalvos()
+  toast(`Bem-vindo, ${data.nome}! ⚽`)
+}
+
+function fazerLogout(){
+  localStorage.removeItem('usuarioBolao')
+  atualizarTelaUsuario()
+  toast('Você saiu da conta.')
+}
+
+async function salvarPalpites(){
+  const usuario = getUsuario()
+  if(!usuario){ toast('Você precisa estar logado para salvar palpites.', true); return }
+  const palpites = {}
+  let incompleto = false
+  document.querySelectorAll('.group').forEach(group => {
+    const letra = group.dataset.grupo
+    const selects = group.querySelectorAll('select')
+    const vals = [...selects].map(s => s.value)
+    if(vals.some(v => !v)) incompleto = true
+    palpites[letra] = {
+      primeiro: vals[0] || null,
+      segundo:  vals[1] || null,
+      terceiro: vals[2] || null,
+      quarto:   vals[3] || null
+    }
+  })
+  if(incompleto){ toast('Preencha todos os grupos antes de salvar.', true); return }
+  const btn = document.getElementById('btnSalvar')
+  btn.textContent = 'Salvando...'
+  btn.disabled = true
+  const { data, error } = await sb.rpc('salvar_palpites', {
+    p_participante_id: usuario.id,
+    p_palpites: palpites
+  })
+  btn.textContent = '💾 Salvar Palpites'
+  btn.disabled = false
+  if(error){
+    toast('Erro ao salvar: ' + error.message, true)
+    document.getElementById('msg').textContent = '❌ Erro ao salvar palpites.'
+    document.getElementById('msg').className = 'msg-erro'
+    return
+  }
+  toast('Palpites salvos com sucesso! ✅')
+  document.getElementById('msg').textContent = '✅ Palpites salvos!'
+  document.getElementById('msg').className = ''
+}
+
+async function carregarPalpitesSalvos(){
+  const usuario = getUsuario()
+  if(!usuario) return
+  const { data, error } = await sb.rpc('buscar_palpites', {
+    p_participante_id: usuario.id
+  })
+  if(error || !data) return
+  Object.entries(data).forEach(([letra, pos]) => {
+    const group = document.querySelector(`.group[data-grupo="${letra}"]`)
+    if(!group) return
+    const selects = group.querySelectorAll('select')
+    const vals = [pos.primeiro, pos.segundo, pos.terceiro, pos.quarto]
+    selects.forEach((sel, i) => { if(vals[i]) sel.value = vals[i] })
+  })
+}
+
+async function carregarRanking(){
+  const container = document.getElementById('rankingContainer')
+  container.innerHTML = '<div class="loading">Carregando ranking...</div>'
+  const { data, error } = await sb.rpc('get_ranking')
+  if(error || !data){
+    container.innerHTML = '<div class="loading">Não foi possível carregar o ranking.</div>'
+    return
+  }
+  if(!data.length){
+    container.innerHTML = '<div class="loading">Nenhum participante com pontuação ainda.</div>'
+    return
+  }
+  const posClasses = ['gold','silver','bronze']
+  const rows = data.map((p, i) => `
+    <tr>
+      <td class="rank-pos ${posClasses[i]||''}">${i+1}º</td>
+      <td><strong>${p.nome}</strong></td>
+      <td class="rank-pts">${p.pontos ?? 0} pts</td>
+    </tr>
+  `).join('')
+  container.innerHTML = `
+    <table class="ranking-table">
+      <thead><tr><th>#</th><th>Participante</th><th>Pontos</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `
+}
+
+async function carregarParticipantesAdmin(){
+  const usuario = getUsuario()
+  if(!usuario || !usuario.is_admin) return
+  const container = document.getElementById('adminParticipantes')
+  container.innerHTML = '<div class="loading">Carregando...</div>'
+  const { data, error } = await sb.rpc('listar_participantes')
+  if(error || !data){
+    container.innerHTML = '<div class="loading">Erro ao carregar participantes.</div>'
+    return
+  }
+  const rows = data.map(p => `
+    <tr>
+      <td>${p.nome}</td>
+      <td style="color:#666">${p.whatsapp}</td>
+      <td class="rank-pts">${p.pontos ?? 0} pts</td>
+      <td><span class="status-badge${p.palpites_enviados ? '' : ' fechado'}">${p.palpites_enviados ? 'Palpitou' : 'Pendente'}</span></td>
+    </tr>
+  `).join('')
+  container.innerHTML = `
+    <table class="ranking-table">
+      <thead><tr><th>Nome</th><th>WhatsApp</th><th>Pontos</th><th>Status</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `
+}
+
+async function recalcularRanking(){
+  const usuario = getUsuario()
+  if(!usuario || !usuario.is_admin){ toast('Acesso negado.', true); return }
+  toast('Recalculando ranking...')
+  const { error } = await sb.rpc('recalcular_ranking')
+  if(error){ toast('Erro ao recalcular: ' + error.message, true); return }
+  toast('Ranking recalculado com sucesso! ✅')
+  carregarParticipantesAdmin()
+}
+
+async function fecharBolao(){
+  if(!confirm('Tem certeza que deseja FECHAR o bolão?')) return
+  const { error } = await sb.rpc('fechar_bolao')
+  if(error){ toast('Erro ao fechar: ' + error.message, true); return }
+  document.getElementById('statusBolao').textContent = 'Fechado'
+  document.getElementById('statusBolao').className = 'status-badge fechado'
+  toast('Bolão fechado! 🔒')
+}
+
+async function abrirBolao(){
+  if(!confirm('Deseja REABRIR o bolão?')) return
+  const { error } = await sb.rpc('abrir_bolao')
+  if(error){ toast('Erro ao reabrir: ' + error.message, true); return }
+  document.getElementById('statusBolao').textContent = 'Aberto'
+  document.getElementById('statusBolao').className = 'status-badge'
+  toast('Bolão reaberto! 🔓')
+}
+
+inicializarGrupos()
+atualizarTelaUsuario()
+const u = getUsuario()
+if(u) carregarPalpitesSalvos()
 </script>
 
-<div id="adminPanel" style="display:none" class="card">
-<h2>Painel do Admin</h2>
-
-<button onclick="recalcularRanking()">
-Recalcular Ranking
-</button>
-
-<button onclick="fecharBolao()">
-Fechar Bolão
-</button>
-</div>
-  
 </body>
 </html>
