@@ -135,6 +135,33 @@ button:active{transform:scale(0.98);}
 #bannerFechado h3{color:#e05555;font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:2px;}
 #bannerFechado p{color:#888;font-size:0.85rem;margin-top:6px;}
 
+
+/* GRUPOS */
+.grupo-card{background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:16px;margin-bottom:14px;}
+.grupo-card h3{color:var(--gold);font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:1px;margin-bottom:4px;}
+.grupo-card .desc{color:#555;font-size:0.8rem;margin-bottom:12px;}
+.grupo-membros-count{color:#888;font-size:0.8rem;margin-bottom:10px;}
+.grupo-ranking{width:100%;border-collapse:collapse;margin-top:8px;}
+.grupo-ranking td{padding:8px 10px;border-bottom:1px solid #1a1a1a;font-size:0.85rem;}
+.grupo-ranking tr:last-child td{border-bottom:none;}
+.grupo-ranking .pos{color:#555;font-family:'Bebas Neue';font-size:1.1rem;width:30px;}
+.grupo-ranking .pos.g{color:#FFD700;}
+.grupo-ranking .pos.s{color:#C0C0C0;}
+.grupo-ranking .pos.b{color:#CD7F32;}
+.grupo-ranking .pts{color:var(--gold);font-weight:700;}
+.admin-grupo-card{background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:16px;margin-bottom:14px;}
+.admin-grupo-card h4{color:var(--gold);font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:1px;margin-bottom:8px;}
+.membro-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1a1a1a;}
+.membro-row:last-child{border-bottom:none;}
+.membro-row span{font-size:0.85rem;}
+.btn-remover{background:#3a1a1a;color:#e05555;border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:0.75rem;width:auto;margin:0;}
+.btn-remover:hover{background:#5a2a2a;}
+.add-membro-row{display:flex;gap:8px;margin-top:10px;}
+.add-membro-row select{margin:0;flex:1;}
+.add-membro-row button{width:auto;padding:8px 14px;margin:0;flex-shrink:0;}
+.btn-del-grupo{background:#3a1a1a;color:#e05555;border:1px solid #5a2a2a;width:auto;padding:6px 12px;margin:8px 0 0;font-size:0.8rem;}
+.btn-del-grupo:hover{background:#5a2a2a;}
+
 .comp-watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0;}
 .comp-watermark img{width:55%;opacity:0.06;filter:invert(1);}
 .comp-content{position:relative;z-index:1;}
@@ -156,6 +183,7 @@ button:active{transform:scale(0.98);}
     <button class="tab-btn" onclick="mostrarTab('tab-palpites')">⚽ Meus Palpites</button>
     <button class="tab-btn" onclick="mostrarTab('tab-ranking')">🏆 Ranking</button>
     <button class="tab-btn" onclick="mostrarTab('tab-regras')">📋 Regras</button>
+    <button class="tab-btn" id="tabGrupos" style="display:none" onclick="mostrarTab('tab-grupos')">👥 Meus Grupos</button>
     <button class="tab-btn" id="tabAdmin" style="display:none" onclick="mostrarTab('tab-admin')">🔧 Admin</button>
   </div>
 
@@ -246,6 +274,16 @@ button:active{transform:scale(0.98);}
     </div>
   </div>
 
+
+  <!-- GRUPOS -->
+  <div id="tab-grupos" class="tab-content">
+    <div class="card">
+      <h2>👥 Meus Grupos</h2>
+      <p style="color:#666;font-size:0.85rem;margin-bottom:16px">Grupos em que você participa. Cada grupo tem seu próprio ranking.</p>
+      <div id="meusGruposContainer"><div class="loading">Carregando seus grupos...</div></div>
+    </div>
+  </div>
+
   <!-- ADMIN -->
   <div id="tab-admin" class="tab-content">
     <div class="card">
@@ -262,6 +300,22 @@ button:active{transform:scale(0.98);}
       <div style="margin-top:20px">
         <h3 style="color:var(--gold);margin-bottom:12px;font-family:'Bebas Neue';letter-spacing:1px">Participantes Cadastrados</h3>
         <div id="adminParticipantes"><div class="loading">Carregando...</div></div>
+      </div>
+
+      <!-- GERENCIAR GRUPOS -->
+      <div style="margin-top:28px;border-top:1px solid #2a2a2a;padding-top:20px">
+        <h3 style="color:var(--gold);margin-bottom:16px;font-family:'Bebas Neue';letter-spacing:1px">👥 Gerenciar Grupos</h3>
+
+        <!-- Criar grupo -->
+        <div style="background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:16px;margin-bottom:16px">
+          <h4 style="color:#aaa;margin-bottom:12px;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px">Criar Novo Grupo</h4>
+          <input id="admin-grupo-nome" placeholder="Nome do grupo (ex: Time da Firma)">
+          <input id="admin-grupo-desc" placeholder="Descrição (opcional)">
+          <button onclick="adminCriarGrupo()" style="margin-top:4px">➕ Criar Grupo</button>
+        </div>
+
+        <!-- Lista de grupos -->
+        <div id="adminGruposContainer"><div class="loading">Carregando grupos...</div></div>
       </div>
     </div>
   </div>
@@ -378,7 +432,8 @@ function mostrarTab(id){
     if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(id)) b.classList.add('active')
   })
   if(id==='tab-ranking') carregarRanking()
-  if(id==='tab-admin') carregarParticipantesAdmin()
+  if(id==='tab-admin'){carregarParticipantesAdmin();carregarAdminGrupos()}
+  if(id==='tab-grupos') carregarMeusGrupos()
 }
 
 function getUsuario(){
@@ -391,6 +446,7 @@ function atualizarTelaUsuario(){
   if(u&&u.nome){
     el.innerHTML=`Olá, ${u.nome} ${u.is_admin?'👑':''}`
     if(u.is_admin) document.getElementById('tabAdmin').style.display=''
+    document.getElementById('tabGrupos').style.display=''
   }else{
     el.innerHTML=''
     document.getElementById('tabAdmin').style.display='none'
@@ -428,6 +484,7 @@ function fazerLogout(){
   localStorage.removeItem('usuarioBolao')
   atualizarTelaUsuario()
   document.getElementById('btnComprovante').style.display='none'
+  document.getElementById('tabGrupos').style.display='none'
   toast('Você saiu da conta.')
 }
 
@@ -628,6 +685,156 @@ document.getElementById('modalComprovante').addEventListener('click',function(e)
   if(e.target===this) fecharModal()
 })
 
+
+
+// ─── GRUPOS ────────────────────────────────────────────────
+
+async function carregarMeusGrupos(){
+  const usuario = getUsuario()
+  const container = document.getElementById('meusGruposContainer')
+  if(!usuario){
+    container.innerHTML = '<div class="loading">Faça login para ver seus grupos.</div>'
+    return
+  }
+  container.innerHTML = '<div class="loading">Carregando...</div>'
+  const{data, error} = await sb.rpc('listar_meus_grupos', {p_participante_id: usuario.id})
+  if(error || !data || !data.length){
+    container.innerHTML = '<div class="loading">Você ainda não foi adicionado a nenhum grupo.</div>'
+    return
+  }
+  container.innerHTML = ''
+  for(const grupo of data){
+    const rankData = await sb.rpc('get_ranking_grupo', {p_grupo_id: grupo.id})
+    const membros = rankData.data || []
+    const posClasses = ['g','s','b']
+    const rows = membros.map((m,i) => `
+      <tr>
+        <td class="pos ${posClasses[i]||''}">${i+1}º</td>
+        <td>${m.nome}${m.id === usuario.id ? ' <span style="color:var(--gold);font-size:0.75rem">(você)</span>':''}</td>
+        <td class="pts">${m.pontos ?? 0} pts</td>
+        <td style="font-size:0.75rem">${m.palpites_enviados ? '✅':'⏳'}</td>
+      </tr>`).join('')
+
+    const div = document.createElement('div')
+    div.className = 'grupo-card'
+    div.innerHTML = `
+      <h3>${grupo.nome}</h3>
+      ${grupo.descricao ? `<div class="desc">${grupo.descricao}</div>` : ''}
+      <div class="grupo-membros-count">👥 ${grupo.total_membros} participante${grupo.total_membros != 1 ? 's':''}</div>
+      <table class="grupo-ranking">
+        <tbody>${rows || '<tr><td colspan="4" style="color:#555;text-align:center;padding:12px">Nenhum participante ainda.</td></tr>'}</tbody>
+      </table>`
+    container.appendChild(div)
+  }
+}
+
+// ─── ADMIN: GRUPOS ─────────────────────────────────────────
+
+let _todosParticipantes = []
+
+async function carregarAdminGrupos(){
+  const usuario = getUsuario()
+  if(!usuario || !usuario.is_admin) return
+
+  // Carregar participantes para o select de adicionar
+  if(!_todosParticipantes.length){
+    const{data} = await sb.rpc('listar_participantes')
+    _todosParticipantes = data || []
+  }
+
+  const container = document.getElementById('adminGruposContainer')
+  container.innerHTML = '<div class="loading">Carregando...</div>'
+
+  const{data, error} = await sb.rpc('listar_todos_grupos')
+  if(error){
+    container.innerHTML = '<div class="loading">Erro ao carregar grupos.</div>'
+    return
+  }
+  if(!data || !data.length){
+    container.innerHTML = '<div class="loading">Nenhum grupo criado ainda.</div>'
+    return
+  }
+
+  container.innerHTML = ''
+  data.forEach(grupo => {
+    const membrosIds = (grupo.membros || []).map(m => m.id)
+    const disponiveis = _todosParticipantes.filter(p => !membrosIds.includes(p.id))
+
+    const membrosList = (grupo.membros || []).map(m => `
+      <div class="membro-row">
+        <span>${m.nome}</span>
+        <button class="btn-remover" onclick="adminRemoverMembro('${grupo.id}','${m.id}')">✕ Remover</button>
+      </div>`).join('')
+
+    const optDisp = disponiveis.map(p => `<option value="${p.id}">${p.nome}</option>`).join('')
+
+    const div = document.createElement('div')
+    div.className = 'admin-grupo-card'
+    div.id = `grupo-card-${grupo.id}`
+    div.innerHTML = `
+      <h4>${grupo.nome} <span style="color:#555;font-size:0.75rem;font-family:'Barlow'">(${grupo.total_membros} membros)</span></h4>
+      ${grupo.descricao ? `<div style="color:#555;font-size:0.8rem;margin-bottom:8px">${grupo.descricao}</div>` : ''}
+      <div>${membrosList || '<div style="color:#555;font-size:0.8rem;padding:6px 0">Nenhum membro ainda.</div>'}</div>
+      <div class="add-membro-row">
+        <select id="sel-add-${grupo.id}">
+          <option value="">Adicionar participante...</option>
+          ${optDisp}
+        </select>
+        <button onclick="adminAdicionarMembro('${grupo.id}')">➕ Adicionar</button>
+      </div>
+      <button class="btn-del-grupo" onclick="adminDeletarGrupo('${grupo.id}','${grupo.nome}')">🗑 Excluir Grupo</button>`
+    container.appendChild(div)
+  })
+}
+
+async function adminCriarGrupo(){
+  const nome = document.getElementById('admin-grupo-nome').value.trim()
+  const desc = document.getElementById('admin-grupo-desc').value.trim()
+  if(!nome){toast('Digite o nome do grupo.',true);return}
+
+  const{data, error} = await sb.rpc('criar_grupo', {p_nome: nome, p_descricao: desc})
+  if(error){toast('Erro: '+error.message,true);return}
+
+  document.getElementById('admin-grupo-nome').value = ''
+  document.getElementById('admin-grupo-desc').value = ''
+  toast('Grupo "'+nome+'" criado! ✅')
+  _todosParticipantes = []
+  carregarAdminGrupos()
+}
+
+async function adminAdicionarMembro(grupoId){
+  const sel = document.getElementById('sel-add-'+grupoId)
+  const participanteId = sel.value
+  if(!participanteId){toast('Selecione um participante.',true);return}
+
+  const{error} = await sb.rpc('adicionar_membro_grupo', {
+    p_grupo_id: grupoId, p_participante_id: participanteId
+  })
+  if(error){toast('Erro: '+error.message,true);return}
+  toast('Participante adicionado! ✅')
+  _todosParticipantes = []
+  carregarAdminGrupos()
+}
+
+async function adminRemoverMembro(grupoId, participanteId){
+  if(!confirm('Remover este participante do grupo?')) return
+  const{error} = await sb.rpc('remover_membro_grupo', {
+    p_grupo_id: grupoId, p_participante_id: participanteId
+  })
+  if(error){toast('Erro: '+error.message,true);return}
+  toast('Participante removido.')
+  _todosParticipantes = []
+  carregarAdminGrupos()
+}
+
+async function adminDeletarGrupo(grupoId, nome){
+  if(!confirm('Excluir o grupo "'+nome+'"? Esta ação não pode ser desfeita.')) return
+  const{error} = await sb.from('grupos_bolao').delete().eq('id', grupoId)
+  if(error){toast('Erro: '+error.message,true);return}
+  toast('Grupo excluído.')
+  _todosParticipantes = []
+  carregarAdminGrupos()
+}
 
 // ─── COUNTDOWN AUTOMÁTICO ──────────────────────────────────
 const PRAZO = new Date('2026-06-10T23:59:59-03:00')
