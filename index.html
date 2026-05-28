@@ -96,6 +96,45 @@ button:active{transform:scale(0.98);}
 .comp-pos{display:flex;gap:8px;align-items:center;margin:3px 0;font-size:0.82rem;}
 .comp-pos .pos{color:#555;min-width:20px;font-weight:700;}
 .comp-pos .time{color:#ddd;}
+
+/* COUNTDOWN */
+#countdownBar{
+  background:#111;
+  border:1px solid var(--gold);
+  border-radius:10px;
+  padding:14px 18px;
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+}
+#countdownBar.encerrado{border-color:#e05555;background:#1a0000;}
+.countdown-label{color:#888;font-size:0.85rem;}
+.countdown-timer{display:flex;gap:12px;}
+.countdown-block{text-align:center;}
+.countdown-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.8rem;
+  color:var(--gold);
+  line-height:1;
+  display:block;
+}
+.countdown-block.encerrado .countdown-num{color:#e05555;}
+.countdown-unit{font-size:0.65rem;color:#555;text-transform:uppercase;letter-spacing:1px;}
+#bannerFechado{
+  background:#1a0000;
+  border:2px solid #e05555;
+  border-radius:12px;
+  padding:20px;
+  text-align:center;
+  margin-bottom:20px;
+  display:none;
+}
+#bannerFechado h3{color:#e05555;font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:2px;}
+#bannerFechado p{color:#888;font-size:0.85rem;margin-top:6px;}
+
 .comp-watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0;}
 .comp-watermark img{width:55%;opacity:0.06;filter:invert(1);}
 .comp-content{position:relative;z-index:1;}
@@ -142,6 +181,38 @@ button:active{transform:scale(0.98);}
 
   <!-- PALPITES -->
   <div id="tab-palpites" class="tab-content">
+
+    <!-- BANNER FECHADO -->
+    <div id="bannerFechado">
+      <h3>🔒 Palpites Encerrados!</h3>
+      <p>O prazo para envio de palpites se encerrou 1 dia antes da Copa do Mundo 2026.</p>
+    </div>
+
+    <!-- COUNTDOWN -->
+    <div id="countdownBar">
+      <div>
+        <div class="countdown-label">⏳ Tempo restante para enviar seus palpites</div>
+      </div>
+      <div class="countdown-timer">
+        <div class="countdown-block" id="cd-dias">
+          <span class="countdown-num" id="cd-d">--</span>
+          <span class="countdown-unit">dias</span>
+        </div>
+        <div class="countdown-block" id="cd-horas">
+          <span class="countdown-num" id="cd-h">--</span>
+          <span class="countdown-unit">horas</span>
+        </div>
+        <div class="countdown-block" id="cd-min">
+          <span class="countdown-num" id="cd-m">--</span>
+          <span class="countdown-unit">min</span>
+        </div>
+        <div class="countdown-block" id="cd-seg">
+          <span class="countdown-num" id="cd-s">--</span>
+          <span class="countdown-unit">seg</span>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <h2>Palpites da Fase de Grupos</h2>
       <div class="grid" id="gruposGrid"></div>
@@ -556,6 +627,48 @@ async function abrirBolao(){
 document.getElementById('modalComprovante').addEventListener('click',function(e){
   if(e.target===this) fecharModal()
 })
+
+
+// ─── COUNTDOWN AUTOMÁTICO ──────────────────────────────────
+const PRAZO = new Date('2026-06-10T23:59:59-03:00')
+
+function atualizarCountdown(){
+  const agora = new Date()
+  const diff = PRAZO - agora
+
+  if(diff <= 0){
+    // Encerrado
+    document.getElementById('countdownBar').classList.add('encerrado')
+    document.getElementById('bannerFechado').style.display = 'block'
+    document.getElementById('countdownBar').style.display = 'none'
+    document.getElementById('btnSalvar').disabled = true
+    document.getElementById('btnSalvar').textContent = '🔒 Palpites Encerrados'
+    document.getElementById('btnSalvar').style.background = '#333'
+    document.getElementById('btnSalvar').style.color = '#666'
+    // Bloquear todos os selects
+    document.querySelectorAll('.group select').forEach(s => s.disabled = true)
+    return
+  }
+
+  const dias  = Math.floor(diff / 86400000)
+  const horas = Math.floor((diff % 86400000) / 3600000)
+  const min   = Math.floor((diff % 3600000) / 60000)
+  const seg   = Math.floor((diff % 60000) / 1000)
+
+  document.getElementById('cd-d').textContent = String(dias).padStart(2,'0')
+  document.getElementById('cd-h').textContent = String(horas).padStart(2,'0')
+  document.getElementById('cd-m').textContent = String(min).padStart(2,'0')
+  document.getElementById('cd-s').textContent = String(seg).padStart(2,'0')
+
+  // Alerta vermelho nos últimos 24h
+  if(diff < 86400000){
+    document.querySelectorAll('.countdown-block').forEach(b => b.classList.add('encerrado'))
+    document.getElementById('countdownBar').style.borderColor = '#e05555'
+  }
+}
+
+atualizarCountdown()
+setInterval(atualizarCountdown, 1000)
 
 inicializarGrupos()
 atualizarTelaUsuario()
